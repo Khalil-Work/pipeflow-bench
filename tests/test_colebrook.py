@@ -51,8 +51,8 @@ def test_colebrook_root_satisfies_equation():
             f, history, converged = colebrook_friction(Re, rel_rough)
             assert converged
             assert abs(colebrook_residual(f, Re, rel_rough)) <= 1e-12
-            # Bisection: residual decays toward zero monotonically in
-            # magnitude after bracketing.
+            # The final residual is smaller here; individual bisection
+            # residual magnitudes need not decrease monotonically.
             assert abs(history[-1]) <= abs(history[0]) + 1e-15
 
 
@@ -122,3 +122,80 @@ def test_input_validation():
         colebrook_friction(1.0e5, 0.5)
     with pytest.raises(ValueError, match="L"):
         pressure_loss(0.02, -1.0, 0.1, 1000.0, 2.0)
+
+
+def test_requested_residual_is_not_replaced_by_width_tolerance():
+    # Previously converged at |g|=1.031374e-9 > requested 1e-9.
+    f, history, converged = colebrook_friction(1e7, 0, tol=1e-9)
+    assert converged
+    assert abs(colebrook_residual(f, 1e7, 0)) <= 1e-9
+    assert history[-1] == colebrook_residual(f, 1e7, 0)
+
+
+@pytest.mark.parametrize("velocity", [0.01, 0.03, 0.10])
+@pytest.mark.parametrize("roughness", [float("nan"), float("inf"), -1e-5, 0.02])
+def test_invalid_roughness_rejected_before_every_regime(velocity, roughness):
+    with pytest.raises(ValueError, match="roughness"):
+        solve_pipe(1000, .001, velocity, .1, 10, roughness)
+
+
+@pytest.mark.parametrize("tol", [0, -1, float("nan"), float("inf"), True])
+def test_invalid_tolerance_rejected(tol):
+    with pytest.raises(ValueError, match="tol"):
+        colebrook_friction(1e5, 0, tol=tol)
+    with pytest.raises(ValueError, match="tol"):
+        solve_pipe(1000, .001, .01, .1, 10, 0, tol=tol)
+
+
+@pytest.mark.parametrize("budget", [0, -1, 1.5, True])
+def test_invalid_iteration_budget_rejected(budget):
+    with pytest.raises(ValueError, match="max_iter"):
+        colebrook_friction(1e5, 0, max_iter=budget)
+
+
+def test_budget_exhaustion_and_stagnation_do_not_claim_convergence():
+    f, history, converged = colebrook_friction(1e5, 1e-4, max_iter=1)
+    assert not converged and len(history) == 1
+    assert history[-1] == colebrook_residual(f, 1e5, 1e-4)
+    f, history, converged = colebrook_friction(1e7, 0, tol=1e-30)
+    assert (abs(history[-1]) <= 1e-30) == converged
+    assert len(history) < 200  # exact success or finite precision stagnation
+
+
+@pytest.mark.parametrize("bad", [0, -1, float("nan"), float("inf")])
+def test_scalar_and_array_laminar_validation_match(bad):
+    for value in (bad, [1000, bad]):
+        with pytest.raises(ValueError, match="Re"):
+            laminar_friction(value)
+    with pytest.raises(ValueError, match="f"):
+        pressure_loss(bad, 10, .1, 1000, 1)
+
+
+def test_nonrepresentable_derived_results_raise():
+    with pytest.raises(FloatingPointError, match="Re"):
+        reynolds(1e308, 1e308, .1, 1)
+    with pytest.raises(FloatingPointError, match="pressure"):
+        pressure_loss(.02, 100, .1, 1e308, 1e308)
+
+
+def test_recorded_trace_contains_actual_bracketed_evaluations():
+    from pipeflow_bench import colebrook_trace
+    trace = colebrook_trace(4000, 1e-4)
+    f, history, converged = colebrook_friction(4000, 1e-4)
+    assert trace["converged"] == converged
+    assert trace["friction_factor"] == f
+    assert trace["residual_history"] == history
+    widths = []
+    for row in trace["iterations"]:
+        assert row["lo"] <= row["f"] <= row["hi"]
+        assert row["residual"] == colebrook_residual(row["f"], 4000, 1e-4)
+        assert colebrook_residual(row["lo"], 4000, 1e-4)*colebrook_residual(row["hi"],4000,1e-4) <= 0
+        widths.append(row["hi"]-row["lo"])
+    assert np.all(np.diff(widths) < 0)
+
+
+def test_reference_approximations_reject_outside_stated_domains():
+    with pytest.raises(ValueError, match="Blasius"):
+        blasius_friction([1e4, 1e7])
+    with pytest.raises(ValueError, match="Haaland"):
+        haaland_friction(3000, 0)
