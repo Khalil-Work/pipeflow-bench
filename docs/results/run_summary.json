@@ -1,0 +1,29 @@
+{
+  "wall_time_s": 14.739021699992009,
+  "runtime": {
+    "python": "3.13.5",
+    "numpy": "2.1.3",
+    "system": "Windows-11-10.0.26200-SP0"
+  },
+  "results": {
+    "max_haaland_rel_diff": 0.01343928175976286,
+    "comparison_cases": 30,
+    "max_comparison_residual": 9.867662242868e-13,
+    "operating_point": {
+      "v_m_s": 1.5,
+      "D_m": 0.05,
+      "eps_m": 4.5e-05,
+      "Re": 74850.0,
+      "regime": "turbulent",
+      "f": 0.022531362454543326,
+      "dp_Pa_per_100m": 50594.17439167704,
+      "converged": true,
+      "final_residual": 8.073541835074138e-13
+    }
+  },
+  "animation": {
+    "file": "root_convergence.gif",
+    "frames": 43,
+    "content": "bisection convergence on the implicit Colebrook equation (recorded residual history, brackets and evaluated midpoint data)"
+  }
+}
