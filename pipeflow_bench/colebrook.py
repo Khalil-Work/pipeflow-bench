@@ -14,6 +14,9 @@ Mass flow from velocity:         mdot = rho v A              [kg/s]
 Reference explicit approximations (for comparison, never as the solver):
 - Haaland (1983):  1/sqrt(f) = -1.8 log10( (eps/3.7D)^1.11 + 6.9/Re )
 - Blasius (smooth, Re < 1e5): f = 0.316 Re^-0.25
+- Churchill (1977), full range Re > 0 incl. laminar limit f -> 64/Re:
+    f = 8 [ (8/Re)^12 + 1/(A+B)^(3/2) ]^(1/12)
+    A = [-2.457 ln( (7/Re)^0.9 + 0.27 eps/D )]^16,  B = (37530/Re)^16
 
 Dimension checks: Re = rho v D / mu [-]; eps/D relative roughness [-].
 All symbols SI. A true convergence flag guarantees |g(f)| <= tol with g
@@ -35,6 +38,7 @@ __all__ = [
     "colebrook_trace",
     "haaland_friction",
     "blasius_friction",
+    "churchill_friction",
     "pressure_loss",
     "solve_pipe",
     "RE_LAMINAR_MAX",
@@ -179,6 +183,21 @@ def blasius_friction(Re):
     if np.any((re < 4000) | (re > 1e5)):
         raise ValueError("Blasius comparison requires 4000 <= Re <= 1e5")
     return _finite_result("Blasius friction", 0.316/re**0.25)
+
+
+def churchill_friction(Re, rel_rough):
+    """Churchill (1977) explicit full-range comparison, Re > 0.
+
+    Valid from laminar through turbulent; reproduces f = 64/Re in the
+    laminar limit and tracks Colebrook within a few percent in the
+    turbulent regime. Comparison only - the solver remains Colebrook.
+    """
+    re = _array_positive("Re", Re)
+    rough = _roughness(rel_rough)
+    a = (-2.457 * np.log((7.0 / re) ** 0.9 + 0.27 * rough)) ** 16
+    b = (37530.0 / re) ** 16
+    value = 8.0 * ((8.0 / re) ** 12 + 1.0 / (a + b) ** 1.5) ** (1.0 / 12.0)
+    return _finite_result("Churchill friction", value)
 
 
 def pressure_loss(f, L, D, rho, v):
