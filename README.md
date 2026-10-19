@@ -87,6 +87,7 @@ print(result["Re"], result["regime"], result["friction_factor"], result["dp_Pa"]
 | Colebrook root vs its own equation (Re 4e3–1e7, ε/D 0–1e-2) | max residual | **≤ 1e-12** |
 | Fully-rough limit vs analytic | relative offset at Re=1e8 / 1e9 | 1.6e-5 / 1.6e-6 (viscous-term physics quantified) |
 | Haaland vs Colebrook (recorded sweep) | max relative difference | **1.34%** |
+| Churchill (1977) vs Colebrook, Re 4e3–1e8 & ε/D 0–0.05 | max relative difference | **< 4%**; laminar limit exact (f → 64/Re) |
 | Blasius vs smooth Colebrook | relative difference | < 5% |
 | Darcy-Weisbach vs hand computation | error | exact (4.0e4 Pa case) |
 | Operating point v=1.5 m/s, D=50 mm | Re / f / Δp per 100 m | 74,850 / 0.0225314 / 50.59 kPa |
@@ -132,6 +133,8 @@ anything outside fully developed incompressible pipe flow.
 
 ## 📚 References
 
+- S. W. Churchill, "Friction factor equation spans all fluid-flow regimes"
+  (Chemical Engineering, 1977) — full-range explicit comparison.
 - S. E. Haaland, "Simple and explicit formulas for the friction factor in
   turbulent pipe flow" (1983).
 - C. F. Colebrook, "Turbulent flow in pipes" (1939).

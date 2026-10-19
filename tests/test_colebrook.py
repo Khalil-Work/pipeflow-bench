@@ -199,3 +199,44 @@ def test_reference_approximations_reject_outside_stated_domains():
         blasius_friction([1e4, 1e7])
     with pytest.raises(ValueError, match="Haaland"):
         haaland_friction(3000, 0)
+
+
+def test_churchill_laminar_limit_is_64_over_Re():
+    from pipeflow_bench import churchill_friction
+
+    for re_ in (10.0, 100.0, 1000.0):
+        assert churchill_friction(re_, 0.0) == pytest.approx(64.0 / re_, rel=2e-3)
+
+
+def test_churchill_tracks_colebrook_in_turbulent_regime():
+    from pipeflow_bench import churchill_friction
+
+    worst = 0.0
+    for re_ in (4000.0, 1.0e4, 1.0e5, 1.0e6, 1.0e7, 1.0e8):
+        for eps_d in (0.0, 1.0e-5, 1.0e-4, 1.0e-3, 5.0e-3, 0.05):
+            f_ch = churchill_friction(re_, eps_d)
+            f_cb, _, converged = colebrook_friction(re_, eps_d)
+            assert converged
+            worst = max(worst, abs(f_ch - f_cb) / f_cb)
+    assert worst < 0.04, f"Churchill vs Colebrook worst deviation {worst:.3%}"
+
+
+def test_churchill_monotone_decreasing_in_Re_smooth():
+    from pipeflow_bench import churchill_friction
+
+    res = np.geomspace(4000.0, 1.0e7, 50)
+    f = churchill_friction(res, 0.0)
+    assert np.all(np.diff(f) < 0)
+
+
+def test_churchill_input_validation():
+    from pipeflow_bench import churchill_friction
+
+    with pytest.raises(ValueError):
+        churchill_friction(0.0, 0.0)
+    with pytest.raises(ValueError):
+        churchill_friction(1.0e5, -1.0)
+    with pytest.raises(ValueError):
+        churchill_friction(1.0e5, 0.2)
+    with pytest.raises(ValueError):
+        churchill_friction(np.nan, 0.0)
