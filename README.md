@@ -198,6 +198,11 @@ iteration progression, not time.</sub>
 - Raw CSVs: `explicit_comparison.csv`, `residual_history.csv`, `pipeline_sweep.csv`,
   `run_summary.json` in [docs/results/](docs/results)
 
+## 💬 Discussions
+
+Questions, usage examples and results from your own flows are welcome in the
+[repository Discussions](https://github.com/khalil-work/pipeflow-bench/discussions).
+
 ## 📚 References
 
 - S. W. Churchill, "Friction factor equation spans all fluid-flow regimes"
