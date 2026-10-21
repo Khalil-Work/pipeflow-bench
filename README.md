@@ -59,15 +59,15 @@ floating-point stagnation returns an explicit `False`. Pressure loss follows
 
 ```mermaid
 flowchart LR
-    A[Inputs: rho, mu, v, D, L, eps] --> B{Validate finite & positive}
+    A[Inputs: rho, mu, v, D, L, eps] --> B{"Validate finite & positive"}
     B -- invalid --> E1[❌ ValueError]
     B -- ok --> C{Regime from Re}
     C -- laminar --> D1[f = 64/Re]
     C -- transition --> D2[🚩 flag band + turbulent path]
-    C -- turbulent --> D3[Bracket + bisection on Colebrook g(f)]
+    C -- turbulent --> D3["Bracket + bisection on Colebrook g(f)"]
     D1 --> F[Darcy–Weisbach Δp, ṁ]
     D2 --> F
-    D3 --> G{residual ≤ tol?}
+    D3 --> G{"residual ≤ tol?"}
     G -- yes --> F
     G -- no --> E2[❌ converged = False + history]
     F --> H[✅ result dict + regime + flags]
