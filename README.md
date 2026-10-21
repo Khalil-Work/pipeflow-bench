@@ -10,13 +10,13 @@
 bisection — with visible residual histories, regime flags, and the root verified against
 its own equation to 1e-12.**
 
-[![tests](https://github.com/khalil-official/pipeflow-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/khalil-official/pipeflow-bench/actions/workflows/ci.yml)
+[![tests](https://github.com/khalil-work/pipeflow-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/khalil-work/pipeflow-bench/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue.svg)](requirements.txt)
 [![tests](https://img.shields.io/badge/tests-39%20passing-brightgreen.svg)](tests)
 [![precision](https://img.shields.io/badge/root%20residual-%E2%89%A4%201e--12-orange.svg)](docs/verification.md)
-[![repo stars](https://img.shields.io/github/stars/khalil-official/pipeflow-bench?style=flat&color=yellow)](https://github.com/khalil-official/pipeflow-bench/stargazers)
-[![last commit](https://img.shields.io/github/last-commit/khalil-official/pipeflow-bench?color=9cf)](https://github.com/khalil-official/pipeflow-bench/commits)
+[![repo stars](https://img.shields.io/github/stars/khalil-work/pipeflow-bench?style=flat&color=yellow)](https://github.com/khalil-work/pipeflow-bench/stargazers)
+[![last commit](https://img.shields.io/github/last-commit/khalil-work/pipeflow-bench?color=9cf)](https://github.com/khalil-work/pipeflow-bench/commits)
 
 [Quick start](#-quick-start) · [Method](#-model-method-and-diagnostics) · [Results](#-results-gallery) · [Verification](#%EF%B8%8F-verification) · [References](#-references)
 
