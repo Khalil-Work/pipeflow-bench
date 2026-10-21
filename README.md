@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="Pipeflow Bench banner: pipe cross-section with velocity profile, pressure-drop annotation and the Colebrook–White equation" width="100%">
+<img src="docs/banner.png" alt="Pipeflow Bench banner: pipe cross-section with velocity profile, pressure-drop annotation and the Colebrook–White equation" width="100%">
 
 # 🚰 Pipeflow Bench
 
