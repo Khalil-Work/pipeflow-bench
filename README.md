@@ -18,7 +18,7 @@ its own equation to 1e-12.**
 [![repo stars](https://img.shields.io/github/stars/khalil-work/pipeflow-bench?style=flat&color=yellow)](https://github.com/khalil-work/pipeflow-bench/stargazers)
 [![last commit](https://img.shields.io/github/last-commit/khalil-work/pipeflow-bench?color=9cf)](https://github.com/khalil-work/pipeflow-bench/commits)
 
-[Quick start](#-quick-start) · [Method](#-model-method-and-diagnostics) · [Results](#-results-gallery) · [Verification](#%EF%B8%8F-verification) · [References](#-references)
+[Homepage](https://khalil-work.github.io) · [Quick start](#-quick-start) · [Method](#-model-method-and-diagnostics) · [Results](#-results-gallery) · [Verification](#%EF%B8%8F-verification) · [References](#-references)
 
 </div>
 
